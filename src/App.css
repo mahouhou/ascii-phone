@@ -1,38 +1,50 @@
+@font-face {
+  font-family: Sligoil;
+  src:    url('./assets/fonts/Sligoil/Sligoil-Micro.woff') format('woff'),
+          url('./assets/fonts/Sligoil/Sligoil-Micro.woff2') format('woff2'),
+          url('./assets/fonts/Sligoil/SligoilMM-Regular.otf') format('opentype');
+}
+
 .App {
-  text-align: center;
+  font-size: 16px;
+  height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App div, button {
+  font-family: "Sligoil", monospace;
+  white-space: pre;
+  line-height: 1rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.App div p {margin: 0}
+
+button {
+  padding: 0;
+  border: 0;
+  font-size: 1rem;
+  margin: 0;
+  cursor: pointer;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+main {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.phone-background {
+  background-color: white;
+  border-right: solid 1px white;
+  box-shadow: 16px 0 black;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#phone-aerial, #phone-top {
+  border-top: solid 1px white;
+  border-radius: 30px 30px 0 0;
+}
+
+#phone-bottom {
+  border-bottom: solid 1px white;
+  border-radius: 0 0 30px 30px;
+  box-shadow: 16px 4px black,16px 0 black;
 }
