@@ -1,5 +1,7 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import './App.css';
+// import { run } from './run';
+// import * as program from './coordinates_xy';
 
 // Generate key pad from numbers 1-9, 0, # and +
 const KeyPad = function({handleClick}) {
@@ -72,9 +74,135 @@ class App extends Component {
     }
   }
 
+  animate = () => {
+    const cols = 200
+    const rows = 60
+    const chars = 'Do the right thing.  '.split('')  
+    const colors = ['red', 'blue']
+    const NUM_FRAMES = 5500
+
+    const target = document.querySelectorAll('pre')[0]
+    // const functions = [baseline, a, b, c]
+    const functions = [baseline]
+
+    let frame = 0
+    let step = 0
+    let t0
+    let fun
+
+    fun = functions[step]
+
+    const loop = (t) => {
+
+      const af = requestAnimationFrame(loop)
+
+      if (this.state.onCall == false) {
+        cancelAnimationFrame(af);
+      }
+
+      if (frame == 0) t0 = performance.now();
+
+      fun(target, frame)
+      frame++
+
+      if (frame == NUM_FRAMES) {
+        const elapsed = performance.now() - t0
+
+        frame = 0
+        step++
+
+        if (step < functions.length) {
+          fun = functions[step]
+        } else {
+          cancelAnimationFrame(af)
+        }
+      }
+    }
+
+    requestAnimationFrame(loop)
+
+    // ---------------------------------------------------------------------
+
+    // Unstyled; should run at 60fps
+    // Direct write to innerHTML
+    function baseline(target, frame) {
+      let html = ''
+      for (let j=0; j<rows; j++) {
+        for (let i=0; i<cols; i++) {
+          const idx = (i + j * rows + frame) % chars.length
+          html += chars[idx]
+        }
+        html += '<br>'
+      }
+      target.innerHTML = html
+    }
+
+    // ---------------------------------------------------------------------
+
+    // Every char is wrapped in a span, same style
+    // Direct write to innerHTML
+    // function a(target, frame) {
+    //   let html = ''
+    //   for (let j=0; j<rows; j++) {
+    //     for (let i=0; i<cols; i++) {
+    //       const idx = (i + j * rows + frame) % chars.length
+    //       html += `<span>${chars[idx % chars.length]}</span>`
+    //     }
+    //     html += '<br>'
+    //   }
+    //   target.innerHTML = html
+    // }
+
+    // ---------------------------------------------------------------------
+
+    // Every char is wrapped in a span, foreground and background change
+    // Direct write to innerHTML
+    // function b(target, frame) {
+    //   let html = ''
+    //   for (let j=0; j<rows; j++) {
+    //     for (let i=0; i<cols; i++) {
+    //       const idx = (i + j * rows + frame)
+    //       const style = `color:${colors[idx % colors.length]};background-color:${colors[(idx+1) % colors.length]};`
+    //       html += `<span style="${style}">${chars[idx % chars.length]}</span>`
+    //     }
+    //     html += '<br>'
+    //   }
+    //   target.innerHTML = html
+    // }
+
+    // ---------------------------------------------------------------------
+
+    // Direct write to innerHTML of each span
+    // Re-use of <spans>
+    // const r = new Array(rows).fill(null).map(function(e) {
+    //   const span = document.createElement('span')
+    //   span.style.display = 'block'
+    //   return span
+    // })
+
+    // function c(target, frame) {
+    //   if (frame == 0) {
+    //     target.innerHTML = ''
+    //     for (let j=0; j<rows; j++) {
+    //       target.appendChild(r[j])
+    //     }
+    //   }
+
+    //   for (let j=0; j<rows; j++) {
+    //     let html = ''
+    //     for (let i=0; i<cols; i++) {
+    //       const idx = (i + j * rows + frame)
+    //       const style = `color:${colors[idx % colors.length]};background-color:${colors[(idx+1) % colors.length]};`
+    //       html += `<span style="${style}">${chars[idx % chars.length]}</span>`
+    //     }
+    //     r[j].innerHTML = html
+    //   }
+    // }
+  }
+
   // Limit screen display to 65 characters
   // White space fills the screen while empty
-  getMaxDisplay = (dialled) => {
+  getMaxDisplay = () => {
     const fullDisplay = this.state.dialled + "                                                                 ";
     const maxDisplay = fullDisplay.slice(0, 65);
     return maxDisplay;
@@ -109,24 +237,24 @@ class App extends Component {
 	}
 
   // Update dialled state with keyboard keys that have been pressed
-  handleKeyPress = event => {
-		const {value} = event.target;
-    console.log(value);
-    // const liveDial = this.state.dialled;
-		// if (typeof value == "number") {
-    //   this.setState((prevState, props) => ({
-    //     ...prevState,
-    //     dialled: liveDial + value,
-    //   }));
-		// }
-	}
+  // handleKeyPress = event => {
+	// 	const {value} = event.target;
+  //   console.log(value);
+  //   // const liveDial = this.state.dialled;
+	// 	// if (typeof value == "number") {
+  //   //   this.setState((prevState, props) => ({
+  //   //     ...prevState,
+  //   //     dialled: liveDial + value,
+  //   //   }));
+	// 	// }
+	// }
 
   // Update onCall state to indicate call is in progress
   // Check dialled number matches correct numbers
   // Play audio message if number is correct
   // Play audio error if number is incorrect
   handleCall = event => {
-    const {value} = event.target;
+    // const {value} = event.target;
     this.setState(() => ({
       onCall: true
     }));
@@ -140,6 +268,7 @@ class App extends Component {
         dialled: "ON CALL..."
       }))
       this.getCall69().play();
+      this.animate();
     } else {
       this.getWrongNum().play();
       this.setState(() => ({
@@ -161,6 +290,9 @@ class App extends Component {
   render() {
     return (
       <main className="App">
+        <pre id="ascii-box"
+          style={this.state.correctNum ? {display: "block"} : {display: "none"}}></pre>
+
         <div id="phone">
           <p>           <span className="phone-background" id="phone-aerial">.-.</span></p>
           <p>           <span className="phone-background">| |</span></p>
