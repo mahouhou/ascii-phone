@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-// import { run } from './run';
-// import * as program from './coordinates_xy';
 
 // Generate key pad from numbers 1-9, 0, # and +
 const KeyPad = function({handleClick}) {
@@ -13,7 +11,6 @@ const KeyPad = function({handleClick}) {
   const Keys1 = numberList.slice(0,3).map((num) => (
     <button
       onClick={handleClick}
-      // onKeyDown={handleKeyPress}
       key={num}
       value={num}
       id={`b${num}`}>
@@ -23,7 +20,6 @@ const KeyPad = function({handleClick}) {
   const Keys2 = numberList.slice(3,6).map((num) => (
     <button
       onClick={handleClick}
-      // onKeyDown={handleKeyPress}
       key={num}
       value={num}
       id={`b${num}`}>
@@ -33,7 +29,6 @@ const KeyPad = function({handleClick}) {
   const Keys3 = numberList.slice(6,9).map((num) => (
     <button
       onClick={handleClick}
-      // onKeyDown={handleKeyPress}
       key={num}
       value={num}
       id={`b${num}`}>
@@ -43,7 +38,6 @@ const KeyPad = function({handleClick}) {
   const Keys4 = symbolList.map((sym) => (
     <button
       onClick={handleClick}
-      // onKeyDown={handleKeyPress}
       key={sym == "+" ? "plus" : (sym == "#" ? "hash" : 0)}
       value={sym}
       id={`b${sym == "+" ? "plus" : (sym == "#" ? "hash" : 0)}`}>
@@ -74,11 +68,12 @@ class App extends Component {
     }
   }
 
+  // ASCII animation that runs when call 69 plays
   animate = () => {
     const cols = 200
     const rows = 60
     const chars = 'Do the right thing.  '.split('')  
-    const colors = ['red', 'blue']
+    // const colors = ['red', 'blue']
     const NUM_FRAMES = 5500
 
     const target = document.querySelectorAll('pre')[0]
@@ -203,16 +198,17 @@ class App extends Component {
   // Limit screen display to 65 characters
   // White space fills the screen while empty
   getMaxDisplay = () => {
-    const fullDisplay = this.state.dialled + "                                                                 ";
+    const fullDisplay = this.state.dialled +
+    "                                                                 ";
     const maxDisplay = fullDisplay.slice(0, 65);
     return maxDisplay;
   }
 
+  // Retrieve audio elements from DOM
   getCall69 = () => {
     const call69 = document.getElementById("call-69");
     return call69;
   }
-
   getWrongNum = () => {
     const wrongNum = document.getElementById("wrong-num");
     return wrongNum;
@@ -236,33 +232,19 @@ class App extends Component {
     }));
 	}
 
-  // Update dialled state with keyboard keys that have been pressed
-  // handleKeyPress = event => {
-	// 	const {value} = event.target;
-  //   console.log(value);
-  //   // const liveDial = this.state.dialled;
-	// 	// if (typeof value == "number") {
-  //   //   this.setState((prevState, props) => ({
-  //   //     ...prevState,
-  //   //     dialled: liveDial + value,
-  //   //   }));
-	// 	// }
-	// }
-
-  // Update onCall state to indicate call is in progress
-  // Check dialled number matches correct numbers
-  // Play audio message if number is correct
-  // Play audio error if number is incorrect
+  // Called when phone button is clicked
   handleCall = event => {
-    // const {value} = event.target;
+    // Update onCall state to indicate call is in progress
     this.setState(() => ({
       onCall: true
     }));
+    // Check dialled number matches correct numbers
     if ((this.state.dialled === "101") ||
         (this.state.dialled === "5042336371") ||
         (this.state.dialled === "+15042336371") ||
         (this.state.dialled === "07401201351") ||
         (this.state.dialled === "+447401201351")) {
+      // Play audio message if number is correct
       this.setState(() => ({
         correctNum: true,
         dialled: "ON CALL..."
@@ -270,6 +252,7 @@ class App extends Component {
       this.getCall69().play();
       this.animate();
     } else {
+      // Play audio error if number is incorrect
       this.getWrongNum().play();
       this.setState(() => ({
         dialled: "WRONG NUMBER..."
@@ -277,6 +260,7 @@ class App extends Component {
     }
   }
 
+  // Called when cancel button is clicked or audio ends
   clearDial = () => {
     this.setState(() => ({
       dialled: '',
@@ -331,47 +315,6 @@ class App extends Component {
           <p className="phone-background">\ ' &#123;SLIGOIL&#125; ' /</p>
           <p className="phone-background" id="phone-bottom"> `--.........--'</p>
         </div>
-        {/* <div>
-          <p>           .-.</p>
-          <p>           | |</p>
-          <p>           | |</p>
-          <p>           | |</p>
-          <p>           | |</p>
-          <p>           | |</p>
-          <p>           | |</p>
-          <p>           | |</p>
-          <p>           | |</p>
-          <p> _.--"""""""--;_</p>
-          <p>//             \\</p>
-          <p>||   .-"""-.   ||</p>
-          <p>||  /  ...  \  ||</p>
-          <p>|| |  :::::  | ||</p>
-          <p>||  \  '''  /  ||</p>
-          <p>||   '-...-'   ||</p>
-          <p>|/.-----------.\|</p>
-          <p>||             ||</p>
-          <p>||             ||</p>
-          <p>||             ||</p>
-          <p>||             ||</p>
-          <p>|\             /|</p>
-          <p>| `'""""""""""` |</p>
-          <p>|&#91;CALL&#93;   &#91;STOP&#93;|</p>
-          <p>|.---..---..---.|</p>
-          <p>||_1_||_2_||_3_||</p>
-          <p>|.---..---..---.|</p>
-          <p>||_4_||_5_||_6_||</p>
-          <p>|.---..---..---.|</p>
-          <p>||_7_||_8_||_9_||</p>
-          <p>|.---..---..---.|</p>
-          <p>||_*_||_0_||_#_||</p>
-          <p>|____ _____ ____|</p>
-          <p>|==== ===== ====|</p>
-          <p>|====  ___  ====|</p>
-          <p>|   .'`   `'.   |</p>
-          <p>|  /  .:::.  \  |</p>
-          <p>\ ' &#123;SLIGOIL&#125; ' /</p>
-          <p> `--.........--'</p>
-        </div> */}
         <audio id="call-69" onEnded={this.getCallEnded} >
           <source src="/audio/call-69.mp3" />
         </audio>
