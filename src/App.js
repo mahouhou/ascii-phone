@@ -1,198 +1,17 @@
-import React, { Component } from 'react';
-import './App.css';
-
-// Generate key pad from numbers 1-9, 0, # and +
-const KeyPad = function({handleClick}) {
-  let numberList = [];
-  let symbolList = ["+",0,"#"];
-  for (let i = 1; i < 10; i++) {
-    numberList.push(i);
-  }
-  const Keys1 = numberList.slice(0,3).map((num) => (
-    <button
-      onClick={handleClick}
-      key={num}
-      value={num}
-      id={`b${num}`}>
-        |_{num}_|
-    </button>
-  ))
-  const Keys2 = numberList.slice(3,6).map((num) => (
-    <button
-      onClick={handleClick}
-      key={num}
-      value={num}
-      id={`b${num}`}>
-        |_{num}_|
-    </button>
-  ))
-  const Keys3 = numberList.slice(6,9).map((num) => (
-    <button
-      onClick={handleClick}
-      key={num}
-      value={num}
-      id={`b${num}`}>
-        |_{num}_|
-    </button>
-  ))
-  const Keys4 = symbolList.map((sym) => (
-    <button
-      onClick={handleClick}
-      key={sym == "+" ? "plus" : (sym == "#" ? "hash" : 0)}
-      value={sym}
-      id={`b${sym == "+" ? "plus" : (sym == "#" ? "hash" : 0)}`}>
-        |_{sym}_|
-    </button>
-  ))
-  const KeyBreak = <p className="phone-background">&#124;.---..---..---.&#124;</p>
-  return <>
-  {KeyBreak}
-  <p className="phone-background">&#124;{Keys1}&#124;</p>
-  {KeyBreak}
-  <p className="phone-background">&#124;{Keys2}&#124;</p>
-  {KeyBreak}
-  <p className="phone-background">&#124;{Keys3}&#124;</p>
-  {KeyBreak}
-  <p className="phone-background">&#124;{Keys4}&#124;</p>
-  </>;
-}
+import React, { Component } from 'react'
+import './App.css'
+import KeyPad from './KeyPad'
+import Animate from './Animate'
 
 // Initialise state
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       dialled: '',
       correctNum: false,
-      onCall: false
+      onCall: false,
     }
-  }
-
-  // ASCII animation that runs when call 69 plays
-  animate = () => {
-    const cols = 200
-    const rows = 60
-    const chars = 'Do the right thing.  '.split('')  
-    // const colors = ['red', 'blue']
-    const NUM_FRAMES = 5500
-
-    const target = document.querySelectorAll('pre')[0]
-    // const functions = [baseline, a, b, c]
-    const functions = [baseline]
-
-    let frame = 0
-    let step = 0
-    let t0
-    let fun
-
-    fun = functions[step]
-
-    const loop = (t) => {
-
-      const af = requestAnimationFrame(loop)
-
-      if (this.state.onCall == false) {
-        cancelAnimationFrame(af);
-      }
-
-      if (frame == 0) t0 = performance.now();
-
-      fun(target, frame)
-      frame++
-
-      if (frame == NUM_FRAMES) {
-        const elapsed = performance.now() - t0
-
-        frame = 0
-        step++
-
-        if (step < functions.length) {
-          fun = functions[step]
-        } else {
-          cancelAnimationFrame(af)
-        }
-      }
-    }
-
-    requestAnimationFrame(loop)
-
-    // ---------------------------------------------------------------------
-
-    // Unstyled; should run at 60fps
-    // Direct write to innerHTML
-    function baseline(target, frame) {
-      let html = ''
-      for (let j=0; j<rows; j++) {
-        for (let i=0; i<cols; i++) {
-          const idx = (i + j * rows + frame) % chars.length
-          html += chars[idx]
-        }
-        html += '<br>'
-      }
-      target.innerHTML = html
-    }
-
-    // ---------------------------------------------------------------------
-
-    // Every char is wrapped in a span, same style
-    // Direct write to innerHTML
-    // function a(target, frame) {
-    //   let html = ''
-    //   for (let j=0; j<rows; j++) {
-    //     for (let i=0; i<cols; i++) {
-    //       const idx = (i + j * rows + frame) % chars.length
-    //       html += `<span>${chars[idx % chars.length]}</span>`
-    //     }
-    //     html += '<br>'
-    //   }
-    //   target.innerHTML = html
-    // }
-
-    // ---------------------------------------------------------------------
-
-    // Every char is wrapped in a span, foreground and background change
-    // Direct write to innerHTML
-    // function b(target, frame) {
-    //   let html = ''
-    //   for (let j=0; j<rows; j++) {
-    //     for (let i=0; i<cols; i++) {
-    //       const idx = (i + j * rows + frame)
-    //       const style = `color:${colors[idx % colors.length]};background-color:${colors[(idx+1) % colors.length]};`
-    //       html += `<span style="${style}">${chars[idx % chars.length]}</span>`
-    //     }
-    //     html += '<br>'
-    //   }
-    //   target.innerHTML = html
-    // }
-
-    // ---------------------------------------------------------------------
-
-    // Direct write to innerHTML of each span
-    // Re-use of <spans>
-    // const r = new Array(rows).fill(null).map(function(e) {
-    //   const span = document.createElement('span')
-    //   span.style.display = 'block'
-    //   return span
-    // })
-
-    // function c(target, frame) {
-    //   if (frame == 0) {
-    //     target.innerHTML = ''
-    //     for (let j=0; j<rows; j++) {
-    //       target.appendChild(r[j])
-    //     }
-    //   }
-
-    //   for (let j=0; j<rows; j++) {
-    //     let html = ''
-    //     for (let i=0; i<cols; i++) {
-    //       const idx = (i + j * rows + frame)
-    //       const style = `color:${colors[idx % colors.length]};background-color:${colors[(idx+1) % colors.length]};`
-    //       html += `<span style="${style}">${chars[idx % chars.length]}</span>`
-    //     }
-    //     r[j].innerHTML = html
-    //   }
-    // }
   }
 
   // Limit screen display to 65 characters
@@ -200,27 +19,15 @@ class App extends Component {
   getMaxDisplay = () => {
     const fullDisplay = this.state.dialled +
     "                                                                 ";
-    const maxDisplay = fullDisplay.slice(0, 65);
-    return maxDisplay;
+    return fullDisplay.slice(0, 65)
   }
 
   // Retrieve audio elements from DOM
   getCall69 = () => {
-    const call69 = document.getElementById("call-69");
-    return call69;
+    return document.getElementById("call-69")
   }
   getWrongNum = () => {
-    const wrongNum = document.getElementById("wrong-num");
-    return wrongNum;
-  }
-
-  // Reset the phone when the audio finishes playing
-  getCallEnded = event => {
-    const {id} = event.target;
-    const audio = document.getElementById(id);
-    if (audio.ended) {
-      this.clearDial()
-    }
+    return document.getElementById("wrong-num")
   }
 
   // Update dialled state with buttons which have been clicked
@@ -229,11 +36,11 @@ class App extends Component {
     const liveDial = this.state.dialled;
     this.setState(() => ({
       dialled: liveDial + value,
-    }));
+    }))
 	}
 
   // Called when phone button is clicked
-  handleCall = event => {
+  handleCall = () => {
     // Update onCall state to indicate call is in progress
     this.setState(() => ({
       onCall: true
@@ -260,6 +67,9 @@ class App extends Component {
     }
   }
 
+  // ASCII animation runs when call 69 is played
+  animate = Animate
+
   // Called when cancel button is clicked or audio ends
   clearDial = () => {
     this.setState(() => ({
@@ -267,8 +77,17 @@ class App extends Component {
       correctNum: false,
       onCall: false
     }))
-    this.getCall69().load();
-    this.getWrongNum().load();
+    this.getCall69().load()
+    this.getWrongNum().load()
+  }
+
+  // Reset the phone when the audio finishes playing
+  getCallEnded = event => {
+    const {id} = event.target;
+    const audio = document.getElementById(id)
+    if (audio.ended) {
+      this.clearDial()
+    }
   }
 
   render() {
@@ -322,8 +141,8 @@ class App extends Component {
           <source src="/audio/wrong-number.mp3" />
         </audio>
       </main>
-    );
+    )
   }
 }
 
-export default App;
+export default App

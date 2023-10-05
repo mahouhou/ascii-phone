@@ -10,4 +10,6 @@ The interactive ASCII phone application simulates a phonecall by
 - playing an error message when an incorrect number is dialled
 - cancelling the call and clearing the screen when the cancel button is pressed
 
+View the live site [here](https://adifferentphone.sligoil.com/). Use test number `101` for a successful call.
+
 This application was created using create-react-app. It incorporates an ASCII animation designed by [Andreas Gysin](https://play.ertdfgcvb.xyz/) and ASCII art by Joan Stark.
