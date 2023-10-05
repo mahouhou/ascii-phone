@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
-import KeyPad from './KeyPad'
-import Animate from './Animate'
+import KeyPad from './components/KeyPad'
+import Animate from './components/Animate'
 
 // Initialise state
 class App extends Component {
